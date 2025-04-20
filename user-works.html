@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>أعمال المستخدمين</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+    }
+
+    .modal-content {
+      background-color: #222;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid gold;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 20px;
+      color: white;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    .close {
+      color: gold;
+      float: left;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="animated delay-1">أعمال مبدعة من مجتمعنا</h1>
+
+  <!-- زر فتح النموذج -->
+  <div style="text-align:center; margin: 20px;">
+    <a class="back-button" onclick="document.getElementById('addWorkModal').style.display='block'">+ أضف عملك</a>
+  </div>
+
+  <!-- نموذج الإضافة -->
+  <div id="addWorkModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="document.getElementById('addWorkModal').style.display='none'">&times;</span>
+      <h2 style="text-align:center; color: gold;">إضافة عمل جديد</h2>
+      <form id="workForm">
+        <input type="text" id="workTitle" placeholder="اسم العمل" required>
+        <textarea id="workDesc" placeholder="وصف مختصر للعمل" required></textarea>
+        <input type="file" id="workImage" accept="image/*" required>
+        <button type="submit">إضافة</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- معرض الأعمال -->
+  <div class="gallery animated delay-2" id="workGallery">
+    <div class="work-item">
+      <img src="example1.jpg" alt="مشروع 3D">
+      <p>فيلم ثلاثي الأبعاد - "العالم الآخر"</p>
+    </div>
+    <div class="work-item">
+      <img src="example2.jpg" alt="مشروع 3D">
+      <p>محاكاة مشهد فضائي بتقنية 3D</p>
+    </div>
+  </div>
+
+  <div class="prev-next-buttons">
+    <a href="create-3d.html">السابق</a>
+    <a href="index.html">التالي</a>
+  </div>
+
+  <div style="text-align:center; margin-top: 30px;">
+    <a href="index.html" class="back-button">العودة إلى الرئيسية</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('workForm');
+    const gallery = document.getElementById('workGallery');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('workTitle').value;
+      const desc = document.getElementById('workDesc').value;
+      const fileInput = document.getElementById('workImage');
+      const file = fileInput.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const newWork = document.createElement('div');
+          newWork.classList.add('work-item');
+          newWork.innerHTML = `
+            <img src="${event.target.result}" alt="${title}">
+            <p>${desc}</p>
+          `;
+          gallery.appendChild(newWork);
+
+          // إغلاق النموذج وإعادة ضبطه
+          document.getElementById('addWorkModal').style.display = 'none';
+          form.reset();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // إغلاق عند الضغط خارج النافذة
+    window.onclick = function(event) {
+      const modal = document.getElementById('addWorkModal');
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+
+</body>
+</html>
